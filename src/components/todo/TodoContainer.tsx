@@ -16,7 +16,7 @@ const TodoContainer = () => {
       <div className="bg-primary-gradient w-full rounded-xl p-2 space-y-5">
         <div className="space-y-3 bg-white rounded-md p-5">
           {state.map((item) => (
-            <TodoCard title={item.title} description={item.description} />
+            <TodoCard {...item} />
           ))}
         </div>
         {/* <div className="bg-white p-3 rounded-xl text-center text-2xl font-mono">

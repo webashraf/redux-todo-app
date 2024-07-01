@@ -28,7 +28,7 @@ export const todoSlice = createSlice({
     completedTask: (state, action: PayloadAction<string>) => {
       const task = state.todos.find((item) => item.id === action.payload);
       task!.isCompleted = !task?.isCompleted;
-      console.log(task!.isCompleted)
+      console.log(task!.isCompleted);
     },
   },
 });

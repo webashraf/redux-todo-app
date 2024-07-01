@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { baseApi } from "../../redux/api/api";
 import { useAppSelector } from "../../redux/hooks";
 import AddTodoModal from "./AddTodoModal";
 import TodoCard from "./TodoCard";
@@ -6,16 +8,27 @@ import TodoFilter from "./TodoFilter";
 const TodoContainer = () => {
   const state = useAppSelector((state) => state.todos.todos);
 
+  const [priority, setPriority] = useState("")
+
+  const { data: allTasks } = baseApi.useGetTodosQuery(priority);
+
+  //! fdskfjs
+  //? dsfsdf
+  //* fdsafds
+  //~ fsdafdf
+  //& fsdfdsf
+  //^ sdffdsf
+
   return (
     <div>
       <div className="flex justify-between mb-3">
         <AddTodoModal />
 
-        <TodoFilter />
+        <TodoFilter priority={priority} setPriority={setPriority} />
       </div>
       <div className="bg-primary-gradient w-full rounded-xl p-2 space-y-5">
         <div className="space-y-3 bg-white rounded-md p-5">
-          {state.map((item) => (
+          {allTasks?.data.map((item) => (
             <TodoCard {...item} />
           ))}
         </div>

@@ -1,5 +1,6 @@
-import { completedTask, removeTodo } from "../../redux/features/todoSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { useState } from "react";
+import { baseApi } from "../../redux/api/api";
+import { removeTodo } from "../../redux/features/todoSlice";
 import { Button } from "../ui/button";
 
 type TTodoCardProps = {
@@ -7,11 +8,37 @@ type TTodoCardProps = {
   title: string;
   description: string;
   isCompleted?: boolean;
+  priority: "high" | "low" | "medium";
 };
 
-const TodoCard = ({ title, description, id, isCompleted }: TTodoCardProps) => {
-  console.log(isCompleted)
-  const dispatch = useAppDispatch();
+const TodoCard = ({
+  title,
+  description,
+  _id,
+  isCompleted,
+  priority,
+}: TTodoCardProps) => {
+  // console.log(isCompleted)
+  // const dispatch = useAppDispatch();
+  const [completeTask, setCompleteTask] = useState("");
+
+  const [updateTodo, { isLoading, isError, isSuccess }] =
+    baseApi.useUpdateCompleteTaskMutation();
+
+  const toggleState = () => {
+    const taskData = {
+      title,
+      description,
+      isCompleted: true,
+      priority,
+    };
+    const property = {
+      id: _id,
+      taskData,
+    };
+    console.log(property);
+    updateTodo(property);
+  };
 
   // const handleTaskComplete = (e: FormEvent) => {
   //   e.prevantDefault();
@@ -21,20 +48,32 @@ const TodoCard = ({ title, description, id, isCompleted }: TTodoCardProps) => {
     <div>
       <div className="flex justify-between items-center bg-white p-3 rounded-xl shadow-md">
         <input
-          onClick={() => dispatch(completedTask(id))}
+          className="mr-2"
+          onClick={() => toggleState()}
           type="checkbox"
           name="complete"
           id="complete"
         />
-        <p>{title}</p>
-        <div>
+        <p className="font-bold flex-1">{title}</p>
+        <p
+          className={`${
+            priority === "low"
+              ? "text-red-500"
+              : priority === "medium"
+              ? "text-yellow-500"
+              : "text-green-400"
+          } flex-1 font-bold`}
+        >
+          {priority}
+        </p>
+        <div className="flex-1 ">
           {isCompleted ? (
             <p className="text-green-600 font-mono">Done</p>
           ) : (
             <p className="text-yellow-500 font-mono">Panding</p>
           )}
         </div>
-        <p>{description}</p>
+        <p className="flex-[2]">{description}</p>
         <div className="space-x-10">
           <Button
             className="bg-red-500"
